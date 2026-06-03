@@ -93,6 +93,40 @@ curl -fsSL https://raw.githubusercontent.com/yanha/GodoMaster/main/install.sh | 
 | "搭建主菜单 UI" | UI 设计 |
 | "添加背景音乐和音效" | 音频系统 |
 
+## Agent 集成（可选）
+
+如果你在使用 `godot-master` 等 Godot 相关的 Agent，可以让 Agent 也能调用技能包的知识库。编辑 Agent 的配置文件（如 `~/.claude/agents/godot-master.md`），在「知识范围」段落前添加：
+
+```markdown
+## 知识库
+
+当需要查阅详细技术参考时，读取以下 GodoMaster 技能包文件：
+
+- **主入口**：`~/.claude/skills/godomaster/SKILL.md`（路由索引 + 快速参考）
+- **参考文档目录**：`~/.claude/skills/godomaster/references/`，共 16 个模块
+
+| 文件 | 内容 |
+|------|------|
+| `01-godot-project-setup.md` | 项目配置、渲染器、目录结构、自动加载 |
+| `02-godot-editor-mastery.md` | 编辑器快捷键、面板、调试工具 |
+| `03-gdscript-pro.md` | GDScript 类型系统、信号、状态机、对象池 |
+| `04-godot-nodes-scenes.md` | 节点参考、场景组合、生命周期、组件模式 |
+| `05-godot-2d-fundamentals.md` | 精灵、TileMap、视差、2D 光照、相机 |
+| `06-godot-3d-fundamentals.md` | 模型导入、PBR 材质、灯光、环境、导航 |
+| `07-godot-physics.md` | 碰撞层、受击箱、射线检测、刚体、关节 |
+| `08-godot-animation.md` | AnimationPlayer、Tween、AnimationTree |
+| `09-godot-ui-design.md` | Control 节点、布局、锚点、主题、对话系统 |
+| `10-godot-audio.md` | 音频总线、音效池、空间音频、动态音乐 |
+| `11-godot-input-system.md` | Input Map、手柄、触屏、按键重映射 |
+| `12-godot-export-deploy.md` | 导出预设、CI/CD、Steam/itch.io |
+| `13-godot-performance.md` | 性能分析、DrawCall、MultiMesh、对象池 |
+| `14-godot-file-io.md` | 存档系统、JSON、ConfigFile、加密 |
+| `15-godot-shaders.md` | 画布着色器、空间着色器、后处理 |
+| `16-godot-networking.md` | ENet、RPC、同步器、大厅、客户端预测 |
+```
+
+配置完成后，Agent 在回答 Godot 问题时会自动查阅这些参考文档，与 Skill 共用同一套知识库。
+
 ## 项目结构
 
 ```

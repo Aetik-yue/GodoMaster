@@ -86,6 +86,29 @@ Type `/godomaster` to invoke the main skill, or mention any Godot topic to auto-
 - "implement save game" → file I/O
 - "optimize draw calls" → performance
 
+## Agent Integration (Optional)
+
+If you use Godot-related Agents like `godot-master`, you can wire them to the skill's knowledge base. Edit the Agent config file (e.g. `~/.claude/agents/godot-master.md`) and add before the knowledge scope section:
+
+```markdown
+## Knowledge Base
+
+When detailed technical reference is needed, read the following GodoMaster skill files:
+
+- **Entry point**: `~/.claude/skills/godomaster/SKILL.md` (routing index + quick reference)
+- **Reference directory**: `~/.claude/skills/godomaster/references/`, 16 modules total
+
+| File | Content |
+|------|---------|
+| `01-godot-project-setup.md` | Project config, renderer, folder structure, autoloads |
+| `02-godot-editor-mastery.md` | Editor shortcuts, panels, debug tools |
+| `03-gdscript-pro.md` | GDScript type system, signals, state machines |
+| ... | ... |
+| `16-godot-networking.md` | ENet, RPC, synchronizers, lobbies |
+```
+
+Once configured, the Agent will consult these references when answering Godot questions, sharing the same knowledge base as the Skill.
+
 ## Structure
 
 ```
