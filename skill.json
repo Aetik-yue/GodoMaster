@@ -1,0 +1,25 @@
+{
+  "name": "godomaster",
+  "displayName": "GodoMaster",
+  "description": "GodoMaster — Godot 4.x game development intelligence: GDScript, nodes/scenes, 2D/3D, physics, animation, UI, audio, input, shaders, networking, performance, export, and file I/O.",
+  "version": "1.0.0",
+  "author": "yanha",
+  "license": "MIT",
+  "repository": "https://github.com/yanha/GodoMaster",
+  "keywords": [
+    "godot",
+    "gamedev",
+    "gdscript",
+    "2d",
+    "3d",
+    "indie",
+    "game-engine",
+    "physics",
+    "animation",
+    "shader"
+  ],
+  "platforms": [
+    "claude"
+  ],
+  "install": "npm install -g godomaster-skill"
+}

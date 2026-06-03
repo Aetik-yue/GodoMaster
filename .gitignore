@@ -1,0 +1,72 @@
+# ============================================
+# GodoMaster .gitignore
+# ============================================
+
+# === Dependencies ===
+node_modules/
+package-lock.json
+yarn.lock
+bun.lock
+bun.lockb
+
+# === Build Output ===
+dist/
+*.tsbuildinfo
+
+# === OS Files ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# === IDE ===
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.code-workspace
+*.sublime-*
+
+# === Environment ===
+.env
+.env.*
+!.env.example
+
+# === Logs ===
+*.log
+logs/
+npm-debug.log*
+
+# === OS Generated ===
+__MACOSX/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# === Backup Files ===
+*.bak
+*.backup
+*.orig
+
+# === Temporary Files ===
+*.tmp
+*.temp
+tmp/
+temp/
+.cache/
+
+# === Godot (from end-user projects, not the skill itself) ===
+# Keep .godot/ in this repo since we don't have a Godot project
+
+# === Archive ===
+*.zip
+*.tar.gz
+*.rar
+*.7z

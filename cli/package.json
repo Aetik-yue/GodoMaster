@@ -1,0 +1,36 @@
+{
+  "name": "godomaster-skill",
+  "version": "1.0.0",
+  "description": "GodoMaster — Claude Code skill for Godot 4.x game development. GDScript, nodes/scenes, 2D/3D, physics, animation, UI, audio, input, shaders, networking, performance, export, and file I/O.",
+  "type": "module",
+  "bin": {
+    "godomaster-skill": "./bin/install.js",
+    "godomaster": "./bin/install.js"
+  },
+  "files": [
+    "bin",
+    "assets"
+  ],
+  "scripts": {
+    "postinstall": "node bin/install.js --silent"
+  },
+  "keywords": [
+    "godot",
+    "gamedev",
+    "gdscript",
+    "claude-code",
+    "game-engine",
+    "2d",
+    "3d",
+    "indie-dev",
+    "claude",
+    "ai-skill",
+    "godomaster"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yanha/GodoMaster"
+  },
+  "homepage": "https://github.com/yanha/GodoMaster#readme",
+  "license": "MIT"
+}
