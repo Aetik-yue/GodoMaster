@@ -386,6 +386,70 @@ func fade_out(node: CanvasItem, duration: float = 0.5) -> void:
     tween.tween_property(node, "modulate:a", 0.0, duration)
     await tween.finished
     node.visible = false
+
+### Dependency Injection (DI)
+Decouple classes from their dependencies by passing dependencies in during initialization or setup.
+
+```gdscript
+# constructor injection
+class_name PlayerController
+extends CharacterBody2D
+
+var _input_handler: InputHandler
+var _stats: PlayerStats
+
+# Inject dependencies via a setup/initialize method
+func setup(input_handler: InputHandler, stats: PlayerStats) -> void:
+    _input_handler = input_handler
+    _stats = stats
+```
+
+### Service Locator
+A registry singleton that allows systems to register themselves and others to query them without hard references.
+
+```gdscript
+# res://scripts/core/service_locator.gd (Autoload)
+extends Node
+
+var _services: Dictionary[String, Variant] = {}
+
+func register_service(name: String, service: Variant) -> void:
+    _services[name] = service
+
+func get_service(name: String) -> Variant:
+    if _services.has(name):
+        return _services[name]
+    push_error("Service not found: ", name)
+    return null
+
+func unregister_service(name: String) -> void:
+    _services.erase(name)
+```
+
+### Event Bus (Signal Bus)
+Avoid tight coupling between distant nodes by using a centralized event bus for global events.
+
+```gdscript
+# res://scripts/core/event_bus.gd (Autoload)
+extends Node
+
+signal player_spawned(player: Player)
+signal score_updated(new_score: int)
+signal quest_completed(quest_id: String)
+signal game_saved
+```
+
+To use the Event Bus:
+```gdscript
+# In Player.gd:
+func _ready() -> void:
+    EventBus.player_spawned.emit(self)
+
+# In HUD.gd:
+func _ready() -> void:
+    EventBus.score_updated.connect(_on_score_updated)
+```
+
 ```
 
 ## Best Practices

@@ -1,11 +1,11 @@
 ---
 name: godomaster
-description: "GodoMaster — Godot 4.x game development intelligence: GDScript, nodes/scenes, 2D/3D rendering, physics, animation, UI, audio, input, shaders, networking, performance, export, and file I/O. Complete workflow for indie and professional game development based on official Godot documentation."
+description: "GodoMaster — Godot 4.x game development intelligence: GDScript, nodes/scenes, 2D/3D rendering, physics, animation, UI, audio, input, shaders, networking, performance, export, file I/O, testing, and architecture tooling. Complete workflow for indie and professional game development based on official Godot documentation."
 argument-hint: "[topic] [context]"
 license: MIT
 metadata:
   author: yanha
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # GodoMaster
@@ -55,6 +55,8 @@ This Skill must be invoked in the following situations:
 | Save/load, JSON, config files | `references/14-godot-file-io.md` | SaveManager, ConfigFile, encryption |
 | Shaders, visual effects | `references/15-godot-shaders.md` | CanvasItem, Spatial, post-processing |
 | Multiplayer, RPC, sync | `references/16-godot-networking.md` | ENet, lobby, state synchronization |
+| Unit tests, integration tests, CI | `references/17-godot-testing.md` | GdUnit4, mocking, scene tests, PlayGodot, headless CLI |
+| Custom Resources, @tool, plugins | `references/18-godot-architecture-tooling.md` | Resource-based architecture, @tool scripts, EditorPlugin, EditorScript |
 
 ## Quick Reference
 
@@ -197,3 +199,5 @@ pause → Escape / Start
 | File I/O | `references/14-godot-file-io.md` |
 | Shaders | `references/15-godot-shaders.md` |
 | Networking | `references/16-godot-networking.md` |
+| Testing & Automation | `references/17-godot-testing.md` |
+| Architecture & Tooling | `references/18-godot-architecture-tooling.md` |

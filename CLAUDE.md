@@ -27,7 +27,9 @@ GodoMaster is a Claude Code skill providing comprehensive Godot 4.x game develop
     ├── 13-godot-performance.md
     ├── 14-godot-file-io.md
     ├── 15-godot-shaders.md
-    └── 16-godot-networking.md
+    ├── 16-godot-networking.md
+    ├── 17-godot-testing.md
+    └── 18-godot-architecture-tooling.md
 ```
 
 ## Sync Rules

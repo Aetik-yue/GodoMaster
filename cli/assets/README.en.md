@@ -22,6 +22,8 @@ A comprehensive Claude Code skill for Godot 4.x game development. Based on the o
 | **File I/O** | Save/load system, JSON, ConfigFile, CSV, Resources, encryption |
 | **Shaders** | 2D effects (dissolve, outline, water), 3D materials (hologram, force field), post-processing |
 | **Networking** | ENet, RPC, MultiplayerSpawner/Synchronizer, lobby, client prediction |
+| **Testing** | GdUnit4 framework, unit testing, scene testing, mocking, CI/CD pipelines |
+| **Architecture** | Custom Resource architecture, @tool scripts, EditorPlugin, EditorScript |
 
 ## Installation
 
@@ -61,7 +63,7 @@ Copy to `~/.claude/skills/godomaster/`:
         ├── 01-godot-project-setup.md
         ├── 02-godot-editor-mastery.md
         ├── ...
-        └── 16-godot-networking.md
+        └── 18-godot-architecture-tooling.md
 ```
 
 ### Claude Marketplace (plugin)
@@ -96,7 +98,7 @@ If you use Godot-related Agents like `godot-master`, you can wire them to the sk
 When detailed technical reference is needed, read the following GodoMaster skill files:
 
 - **Entry point**: `~/.claude/skills/godomaster/SKILL.md` (routing index + quick reference)
-- **Reference directory**: `~/.claude/skills/godomaster/references/`, 16 modules total
+- **Reference directory**: `~/.claude/skills/godomaster/references/`, 18 modules total
 
 | File | Content |
 |------|---------|
@@ -105,6 +107,8 @@ When detailed technical reference is needed, read the following GodoMaster skill
 | `03-gdscript-pro.md` | GDScript type system, signals, state machines |
 | ... | ... |
 | `16-godot-networking.md` | ENet, RPC, synchronizers, lobbies |
+| `17-godot-testing.md` | GdUnit4, unit/scene testing, mocking, CI/CD |
+| `18-godot-architecture-tooling.md` | Custom Resources, @tool scripts, EditorPlugin, EditorScript |
 ```
 
 Once configured, the Agent will consult these references when answering Godot questions, sharing the same knowledge base as the Skill.
@@ -124,7 +128,7 @@ GodoMaster/
 │   └── marketplace.json          # Marketplace listing
 ├── .claude/skills/godomaster/
 │   ├── SKILL.md                  # Main skill (routing + quick ref)
-│   └── references/               # 16 detailed reference files
+│   └── references/               # 18 detailed reference files
 │       ├── 01-godot-project-setup.md
 │       ├── 02-godot-editor-mastery.md
 │       ├── 03-gdscript-pro.md
@@ -140,7 +144,9 @@ GodoMaster/
 │       ├── 13-godot-performance.md
 │       ├── 14-godot-file-io.md
 │       ├── 15-godot-shaders.md
-│       └── 16-godot-networking.md
+│       ├── 16-godot-networking.md
+│       ├── 17-godot-testing.md
+│       └── 18-godot-architecture-tooling.md
 ├── cli/
 │   ├── package.json              # NPM package
 │   ├── bin/install.js            # Installer

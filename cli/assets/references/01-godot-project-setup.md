@@ -112,6 +112,37 @@ export/
 - `*.import` — debatable, small projects can include
 - `.godot/` — never (auto-generated)
 
+### Git LFS Setup
+Game projects involve large binary files (textures, audio, 3D meshes, fonts). Use Git LFS (Large File Storage) to prevent repository bloat.
+
+Create a `.gitattributes` file in the project root:
+```
+# 3D models and animation
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.obj filter=lfs diff=lfs merge=lfs -text
+*.gltf filter=lfs diff=lfs merge=lfs -text
+*.glb filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+
+# Textures and images
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.svg filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.webp filter=lfs diff=lfs merge=lfs -text
+
+# Audio assets
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+
+# Compiled/exported binaries
+*.pck filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+```
+
+
 ## Autoload Setup
 
 Common autoloads for most projects:
