@@ -2,6 +2,8 @@
 
 [**English**](README.en.md) | **简体中文**
 
+[![GodoMaster Banner](https://github.com/Aetik-yue/GodoMaster/raw/main/banner.png)](https://github.com/Aetik-yue/GodoMaster)
+
 基于 Godot 官方文档打造的 Claude Code 游戏开发技能包，覆盖 Godot 4.x 完整开发工作流。
 
 ## 包含内容

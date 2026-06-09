@@ -1,5 +1,9 @@
 # GodoMaster
 
+[**简体中文**](README.md)
+
+[![GodoMaster Banner](https://github.com/Aetik-yue/GodoMaster/raw/main/banner.png)](https://github.com/Aetik-yue/GodoMaster)
+
 A comprehensive Claude Code skill for Godot 4.x game development. Based on the official Godot documentation, covering the complete game development workflow.
 
 ## What's Included
