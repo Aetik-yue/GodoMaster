@@ -1,107 +1,66 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 320" width="256" height="320">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a0a1a"/>
-      <stop offset="50%" stop-color="#0d1b2a"/>
-      <stop offset="100%" stop-color="#1b263b"/>
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#0d2744"/>
     </linearGradient>
-    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00f5ff"/>
-      <stop offset="100%" stop-color="#00b4d8"/>
+    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4a9eff"/>
+      <stop offset="50%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#4a9eff"/>
     </linearGradient>
-    <linearGradient id="neonPurple" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#9d4edd"/>
-      <stop offset="100%" stop-color="#7b2cbf"/>
-    </linearGradient>
-    <linearGradient id="neonOrange" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF8C42"/>
-      <stop offset="100%" stop-color="#FF6D00"/>
+    <linearGradient id="fillGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a9eff"/>
+      <stop offset="100%" stop-color="#00d4ff"/>
     </linearGradient>
     <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
 
   <!-- Background -->
-  <rect width="256" height="256" fill="url(#bgGrad)" rx="24"/>
+  <rect width="256" height="256" fill="url(#bgGrad)" rx="20"/>
 
-  <!-- Outer ring -->
-  <circle cx="128" cy="128" r="110" fill="none" stroke="url(#neonCyan)" stroke-width="2" opacity="0.3"/>
-  <circle cx="128" cy="128" r="100" fill="none" stroke="url(#neonCyan)" stroke-width="1" opacity="0.15"/>
+  <!-- Top accent line -->
+  <rect x="40" y="0" width="176" height="3" rx="1.5" fill="url(#lineGrad)"/>
 
-  <!-- Hexagonal grid pattern -->
-  <g stroke="#00f5ff" stroke-width="0.5" opacity="0.12">
-    <polygon points="128,50 158,65 158,95 128,110 98,95 98,65" fill="none"/>
-    <polygon points="78,95 108,110 108,140 78,155 48,140 48,110" fill="none"/>
-    <polygon points="178,95 208,110 208,140 178,155 148,140 148,110" fill="none"/>
-    <polygon points="103,145 133,160 133,190 103,205 73,190 73,160" fill="none"/>
-    <polygon points="153,145 183,160 183,190 153,205 123,190 123,160" fill="none"/>
-    <polygon points="128,20 150,31 150,53 128,64 106,53 106,31" fill="none"/>
+  <!-- Central code brackets with dot -->
+  <g transform="translate(128, 128)" filter="url(#glow)">
+    <!-- Left bracket -->
+    <path d="M-60,0 L-80,0 Q-90,-30 -60,-60 Q-50,-70 -40,-60 L-40,-50 Q-45,-55 -50,-50 Q-55,-40 -50,-30 Q-45,-20 -40,-15 L-40,0"
+          fill="none" stroke="url(#lineGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Right bracket -->
+    <path d="M60,0 L80,0 Q90,-30 60,-60 Q50,-70 40,-60 L40,-50 Q45,-55 50,-50 Q55,-40 50,-30 Q45,-20 40,-15 L40,0"
+          fill="none" stroke="url(#lineGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Center dot -->
+    <circle cx="0" cy="-30" r="6" fill="url(#fillGrad)"/>
+    <!-- Connecting lines -->
+    <line x1="-40" y1="-30" x2="-20" y2="-30" stroke="url(#lineGrad)" stroke-width="2" opacity="0.5"/>
+    <line x1="40" y1="-30" x2="20" y2="-30" stroke="url(#lineGrad)" stroke-width="2" opacity="0.5"/>
   </g>
 
-  <!-- Circuit lines -->
-  <g stroke="#00f5ff" stroke-width="1.5" opacity="0.5" fill="none">
-    <path d="M128,18 L128,50"/>
-    <path d="M128,206 L128,238"/>
-    <path d="M18,128 L50,128"/>
-    <path d="M206,128 L238,128"/>
-    <path d="M50,50 L70,70"/>
-    <path d="M206,50 L186,70"/>
-    <path d="M50,206 L70,186"/>
-    <path d="M206,206 L186,186"/>
+  <!-- Horizontal tech lines -->
+  <g stroke="url(#lineGrad)" stroke-width="1" opacity="0.3">
+    <line x1="30" y1="80" x2="80" y2="80"/>
+    <line x1="176" y1="80" x2="226" y2="80"/>
+    <line x1="30" y1="176" x2="80" y2="176"/>
+    <line x1="176" y1="176" x2="226" y2="176"/>
   </g>
-
-  <!-- Circuit nodes -->
-  <g fill="#00f5ff" opacity="0.6">
-    <circle cx="128" cy="18" r="3"/>
-    <circle cx="128" cy="238" r="3"/>
-    <circle cx="18" cy="128" r="3"/>
-    <circle cx="238" cy="128" r="3"/>
-    <circle cx="50" cy="50" r="2"/>
-    <circle cx="206" cy="50" r="2"/>
-    <circle cx="50" cy="206" r="2"/>
-    <circle cx="206" cy="206" r="2"/>
-  </g>
-
-  <!-- Central hexagon frame -->
-  <polygon points="128,60 168,80 168,120 128,140 88,120 88,80"
-           fill="none" stroke="url(#neonCyan)" stroke-width="2" filter="url(#glow)"/>
-
-  <!-- Inner hexagon -->
-  <polygon points="128,75 155,90 155,115 128,130 101,115 101,90"
-           fill="#0d1b2a" stroke="url(#neonPurple)" stroke-width="1.5" opacity="0.8"/>
-
-  <!-- Game controller silhouette -->
-  <g transform="translate(128, 102)">
-    <path d="M-22,-6 L-26,-6 L-30,-12 L-30,-20 Q-30,-26 -24,-26 L-18,-26 Q-14,-26 -12,-22 L-8,-14 L-4,-14 L-4,-26 Q-4,-30 0,-30 Q4,-30 4,-26 L4,-14 L8,-14 L12,-22 Q14,-26 18,-26 L24,-26 Q30,-26 30,-20 L30,-12 L26,-6 L22,-6 Q22,-2 18,2 L-18,2 Q-22,-2 -22,-6 Z"
-          fill="url(#neonOrange)" filter="url(#glow)"/>
-    <!-- D-pad -->
-    <rect x="-20" y="-4" width="4" height="12" rx="1" fill="#0a0a1a"/>
-    <rect x="-22" y="-2" width="8" height="4" rx="1" fill="#0a0a1a"/>
-    <!-- Buttons -->
-    <circle cx="16" cy="-2" r="3" fill="#0a0a1a"/>
-    <circle cx="12" cy="-6" r="3" fill="#0a0a1a"/>
-    <!-- Code slash -->
-    <text x="-2" y="3" font-family="monospace" font-size="10" font-weight="bold" fill="#0a0a1a" text-anchor="middle">&lt;/&gt;</text>
-  </g>
-
-  <!-- Orbiting dots -->
-  <g fill="#00f5ff" opacity="0.7">
-    <circle cx="128" cy="45" r="2"/>
-    <circle cx="173" cy="63" r="2"/>
-    <circle cx="83" cy="63" r="2"/>
-  </g>
-
-  <!-- GM text -->
-  <text x="128" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="bold"
-        fill="url(#neonCyan)" letter-spacing="4" opacity="0.9">GM</text>
 
   <!-- Corner accents -->
-  <g stroke="#9d4edd" stroke-width="2" opacity="0.4">
-    <path d="M20,30 L20,20 L30,20"/>
-    <path d="M236,30 L236,20 L226,20"/>
-    <path d="M20,226 L20,236 L30,236"/>
-    <path d="M236,226 L236,236 L226,236"/>
+  <g stroke="#4a9eff" stroke-width="2" opacity="0.6">
+    <path d="M20,20 L20,35 L35,20"/>
+    <path d="M236,20 L236,35 L221,20"/>
+    <path d="M20,236 L20,221 L35,236"/>
+    <path d="M236,236 L236,221 L221,236"/>
+  </g>
+
+  <!-- Small dots -->
+  <g fill="#4a9eff" opacity="0.5">
+    <circle cx="50" cy="128" r="2"/>
+    <circle cx="206" cy="128" r="2"/>
+    <circle cx="128" cy="50" r="2"/>
+    <circle cx="128" cy="206" r="2"/>
   </g>
 </svg>
