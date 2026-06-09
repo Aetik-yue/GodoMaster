@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://github.com/Aetik-yue/GodoMaster/raw/main/icon.png" width="128" height="128" alt="GodoMaster"><br>
-  <img src="https://img.shields.io/github/stars/Aetik-yue/GodoMaster?style=flat-square" alt="Stars">
+  <img src="https://img.shields.io/github/stars/aetik-yue/GodoMaster?style=flat-square&label=stars" alt="Stars">
 </p>
 
 [**简体中文**](README.md)
