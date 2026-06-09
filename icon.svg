@@ -1,24 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0b1929"/>
-      <stop offset="100%" stop-color="#112240"/>
+      <stop offset="0%" stop-color="#0a192f"/>
+      <stop offset="100%" stop-color="#0d2137"/>
     </linearGradient>
-    <linearGradient id="strokeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#64ffda"/>
-      <stop offset="50%" stop-color="#4a9eff"/>
-      <stop offset="100%" stop-color="#64ffda"/>
-    </linearGradient>
-    <linearGradient id="fillGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#4a9eff"/>
       <stop offset="100%" stop-color="#64ffda"/>
     </linearGradient>
+    <linearGradient id="lightBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#89CFF0"/>
+      <stop offset="100%" stop-color="#4a9eff"/>
+    </linearGradient>
     <filter id="glow">
-      <feGaussianBlur stdDeviation="2.5" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="softGlow">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
@@ -26,58 +21,59 @@
   <!-- Background -->
   <rect width="256" height="256" fill="url(#bgGrad)" rx="20"/>
 
-  <!-- Outer hexagon (thin) -->
-  <polygon points="128,30 206,64 206,136 128,170 50,136 50,64"
-           fill="none" stroke="#4a9eff" stroke-width="1" opacity="0.2"/>
+  <!-- Geometric "G" built from angular planes -->
+  <g transform="translate(128, 112)">
+    <!-- Outer G shape - top bar -->
+    <path d="M40,-56 L40,-48 L12,-48 L12,-8 L28,-8 L28,-20 L12,-20 L12,-28 L36,-28 L36,0 L4,0 L4,-56 Z"
+          fill="url(#lightBlue)" opacity="0.15"/>
 
-  <!-- Main hexagon -->
-  <polygon points="128,42 194,72 194,128 128,158 62,128 62,72"
-           fill="none" stroke="url(#strokeGrad)" stroke-width="2.5" filter="url(#glow)"/>
+    <!-- Main G stroke - angular geometric -->
+    <!-- Top horizontal -->
+    <line x1="8" y1="-52" x2="44" y2="-52" stroke="url(#blueGrad)" stroke-width="5" stroke-linecap="square" filter="url(#glow)"/>
+    <!-- Right vertical (top) -->
+    <line x1="44" y1="-52" x2="44" y2="-4" stroke="url(#blueGrad)" stroke-width="5" stroke-linecap="square" filter="url(#glow)"/>
+    <!-- Middle horizontal (inward) -->
+    <line x1="44" y1="-4" x2="20" y2="-4" stroke="url(#blueGrad)" stroke-width="5" stroke-linecap="square" filter="url(#glow)"/>
+    <!-- Middle vertical (down) -->
+    <line x1="20" y1="-4" x2="20" y2="-24" stroke="url(#blueGrad)" stroke-width="5" stroke-linecap="square" filter="url(#glow)"/>
+    <!-- Middle horizontal (to right, inner cut) -->
+    <line x1="20" y1="-24" x2="36" y2="-24" stroke="url(#blueGrad)" stroke-width="5" stroke-linecap="square" filter="url(#glow)"/>
+    <!-- Left vertical -->
+    <line x1="8" y1="-52" x2="8" y2="4" stroke="url(#blueGrad)" stroke-width="5" stroke-linecap="square" filter="url(#glow)"/>
+    <!-- Bottom horizontal -->
+    <line x1="8" y1="4" x2="44" y2="4" stroke="url(#blueGrad)" stroke-width="5" stroke-linecap="square" filter="url(#glow)"/>
 
-  <!-- Inner hexagon -->
-  <polygon points="128,60 178,82 178,118 128,140 78,118 78,82"
-           fill="#0b1929" fill-opacity="0.6" stroke="#4a9eff" stroke-width="1" opacity="0.35"/>
-
-  <!-- Hex corner dots -->
-  <g fill="#64ffda" opacity="0.7">
-    <circle cx="128" cy="42" r="3"/>
-    <circle cx="194" cy="72" r="3"/>
-    <circle cx="194" cy="128" r="3"/>
-    <circle cx="128" cy="158" r="3"/>
-    <circle cx="62" cy="128" r="3"/>
-    <circle cx="62" cy="72" r="3"/>
+    <!-- Accent slash through G -->
+    <line x1="-4" y1="-60" x2="-20" y2="12" stroke="#64ffda" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
   </g>
 
-  <!-- Center glow -->
-  <circle cx="128" cy="100" r="28" fill="#4a9eff" opacity="0.06" filter="url(#softGlow)"/>
-
-  <!-- Code brackets -->
-  <g transform="translate(128, 95)" filter="url(#glow)">
-    <!-- Left < -->
-    <path d="M-38,0 L-22,-18 L-22,-12 L-32,0 L-22,12 L-22,18 Z"
-          fill="url(#fillGrad)" opacity="0.9"/>
-    <!-- Right / > -->
-    <path d="M38,0 L22,-18 L22,-12 L32,0 L22,12 L22,18 Z"
-          fill="url(#fillGrad)" opacity="0.9"/>
-    <!-- Slash -->
-    <line x1="6" y1="-16" x2="-6" y2="16" stroke="#64ffda" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+  <!-- Subtle grid dots -->
+  <g fill="#4a9eff" opacity="0.12">
+    <circle cx="40" cy="40" r="1.5"/>
+    <circle cx="40" cy="60" r="1.5"/>
+    <circle cx="60" cy="40" r="1.5"/>
+    <circle cx="60" cy="60" r="1.5"/>
+    <circle cx="196" cy="40" r="1.5"/>
+    <circle cx="196" cy="60" r="1.5"/>
+    <circle cx="216" cy="40" r="1.5"/>
+    <circle cx="216" cy="60" r="1.5"/>
+    <circle cx="40" cy="196" r="1.5"/>
+    <circle cx="40" cy="216" r="1.5"/>
+    <circle cx="60" cy="196" r="1.5"/>
+    <circle cx="60" cy="216" r="1.5"/>
+    <circle cx="196" cy="196" r="1.5"/>
+    <circle cx="196" cy="216" r="1.5"/>
+    <circle cx="216" cy="196" r="1.5"/>
+    <circle cx="216" cy="216" r="1.5"/>
   </g>
 
-  <!-- GM text -->
-  <text x="128" y="210" text-anchor="middle" font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
-        font-size="32" font-weight="600" fill="url(#fillGrad)" letter-spacing="8" filter="url(#glow)">GM</text>
+  <!-- Bottom text -->
+  <text x="128" y="200" text-anchor="middle" font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
+        font-size="22" font-weight="600" fill="url(#blueGrad)" letter-spacing="6">GodoMaster</text>
 
-  <!-- Subtle tagline -->
-  <text x="128" y="232" text-anchor="middle" font-family="'SF Mono', 'Fira Code', monospace"
-        font-size="9" fill="#4a9eff" opacity="0.4" letter-spacing="3">GODOT MASTERY</text>
+  <!-- Thin underline -->
+  <line x1="58" y1="210" x2="198" y2="210" stroke="url(#blueGrad)" stroke-width="1" opacity="0.3"/>
 
-  <!-- Horizontal tech lines -->
-  <g stroke="#4a9eff" stroke-width="1" opacity="0.2">
-    <line x1="30" y1="185" x2="78" y2="185"/>
-    <line x1="178" y1="185" x2="226" y2="185"/>
-  </g>
-
-  <!-- Small accent dots on tech lines -->
-  <circle cx="78" cy="185" r="2" fill="#4a9eff" opacity="0.4"/>
-  <circle cx="178" cy="185" r="2" fill="#4a9eff" opacity="0.4"/>
+  <!-- Version dot -->
+  <circle cx="198" cy="210" r="2.5" fill="#64ffda" opacity="0.5"/>
 </svg>
