@@ -1,8 +1,18 @@
 # GodoMaster
 
-[**English**](README.en.md) | **简体中文**
+<p align="center">
+  <img src="https://github.com/Aetik-yue/GodoMaster/raw/main/icon.png" width="128" height="128" alt="GodoMaster">
+</p>
 
-[![GodoMaster Banner](https://github.com/Aetik-yue/GodoMaster/raw/main/banner.png)](https://github.com/Aetik-yue/GodoMaster)
+<p align="center">
+
+  <img src="https://img.shields.io/github/stars/Aetik-yue/GodoMaster?style=flat-square" alt="Stars">
+  <img src="https://img.shields.io/npm/v/godomaster-skill?style=flat-square" alt="NPM Version">
+  <img src="https://img.shields.io/github/license/Aetik-yue/GodoMaster?style=flat-square" alt="License">
+
+</p>
+
+[**English**](README.en.md) | **简体中文**
 
 基于 Godot 官方文档打造的 Claude Code 游戏开发技能包，覆盖 Godot 4.x 完整开发工作流。
 

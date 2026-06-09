@@ -1,8 +1,18 @@
 # GodoMaster
 
-[**简体中文**](README.md)
+<p align="center">
+  <img src="https://github.com/Aetik-yue/GodoMaster/raw/main/icon.png" width="128" height="128" alt="GodoMaster">
+</p>
 
-[![GodoMaster Banner](https://github.com/Aetik-yue/GodoMaster/raw/main/banner.png)](https://github.com/Aetik-yue/GodoMaster)
+<p align="center">
+
+  <img src="https://img.shields.io/github/stars/Aetik-yue/GodoMaster?style=flat-square" alt="Stars">
+  <img src="https://img.shields.io/npm/v/godomaster-skill?style=flat-square" alt="NPM Version">
+  <img src="https://img.shields.io/github/license/Aetik-yue/GodoMaster?style=flat-square" alt="License">
+
+</p>
+
+[**简体中文**](README.md)
 
 A comprehensive Claude Code skill for Godot 4.x game development. Based on the official Godot documentation, covering the complete game development workflow.
 
