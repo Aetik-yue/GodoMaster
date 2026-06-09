@@ -7,8 +7,6 @@
 <p align="center">
 
   <img src="https://img.shields.io/github/stars/Aetik-yue/GodoMaster?style=flat-square" alt="Stars">
-  <img src="https://img.shields.io/npm/v/godomaster-skill?style=flat-square" alt="NPM Version">
-  <img src="https://img.shields.io/github/license/Aetik-yue/GodoMaster?style=flat-square" alt="License">
 
 </p>
 
