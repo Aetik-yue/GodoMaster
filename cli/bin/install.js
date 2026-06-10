@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
-import { mkdir, cp, readFile, access, readdir } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
-import { homedir } from 'node:os';
-import { fileURLToPath } from 'node:url';
+const { mkdir, cp, access, readdir } = require('node:fs/promises');
+const { join } = require('node:path');
+const { homedir } = require('node:os');
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
 const ASSETS_DIR = join(__dirname, '..', 'assets');
 const TARGET_DIR = join(homedir(), '.claude', 'skills', 'godomaster');
 
