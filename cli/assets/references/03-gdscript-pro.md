@@ -83,6 +83,14 @@ var scores: Array[int] = [10, 20, 30]
 # Typed dictionaries
 var inventory: Dictionary[String, int] = {}
 
+# Nested typed dictionaries (4.4+)
+var stats: Dictionary[String, Dictionary] = {}
+var lookup: Dictionary[String, Array[int]] = {}
+
+# StringName literals — use & for signal/property keys (performance)
+signal_name = &"health_changed"
+prop_name = &"position"
+
 # Nullable types
 var target: Node2D = null
 var target_ref: Node2D  # non-nullable, must assign before use
@@ -117,6 +125,26 @@ enum State { IDLE, WALK, RUN, JUMP }
 @export_group("Combat")
 @export var damage: int = 10
 @export var attack_range: float = 50.0
+
+# Export storage — serialized but hidden from Inspector (4.4+)
+@export_storage var internal_state: int = 0
+
+# Custom export hints (4.4+)
+@export_custom(PROPERTY_HINT_RANGE, "0,100,1") var custom_value: int = 50
+```
+
+### Warning Control (4.4+)
+```gdscript
+# Suppress specific GDScript warnings when justified
+@warning_ignore("shadowed_variable")
+@warning_ignore("unused_parameter")
+@warning_ignore("return_value_discarded")
+func _process(_delta: float) -> void:
+    pass
+
+# Per-function or per-statement suppression
+@warning_ignore("integer_division")
+var result := 10 / 3
 ```
 
 ## Signals
@@ -154,11 +182,40 @@ signal_name.connect(_on_signal, CONNECT_DEFERRED)
 # Lambda
 button.pressed.connect(func(): print("clicked"))
 
+# Multi-statement lambda (4.4+)
+button.pressed.connect(func():
+    print("step 1")
+    print("step 2")
+)
+
 # With bind
 enemy.died.connect(_on_enemy_died.bind(enemy))
 
 # Method reference
 var callback := Callable(self, "_on_callback")
+```
+
+### Static Methods and Variables
+```gdscript
+class_name MathUtils
+extends RefCounted
+
+# Static method — callable without an instance
+static func clamp_angle(angle: float, min_angle: float, max_angle: float) -> float:
+    return fposmod(clampf(angle, min_angle, max_angle), TAU)
+
+# Static variable — shared across all instances (4.4+)
+static var instance_count: int = 0
+
+func _init() -> void:
+    instance_count += 1
+
+# Factory pattern
+static func create_with_stats(hp: int, dmg: int) -> CharacterStats:
+    var stats := CharacterStats.new()
+    stats.max_health = hp
+    stats.damage = dmg
+    return stats
 ```
 
 ## Node Access
@@ -386,6 +443,27 @@ func fade_out(node: CanvasItem, duration: float = 0.5) -> void:
     tween.tween_property(node, "modulate:a", 0.0, duration)
     await tween.finished
     node.visible = false
+```
+
+### Await Patterns (4.4+)
+```gdscript
+# Await with typed signal parameters
+signal data_loaded(data: Dictionary)
+var result := await data_loaded
+# result is typed as Dictionary
+
+# Safe await with timeout
+func await_with_timeout(signal_ref: Signal, timeout: float = 5.0) -> Variant:
+    var results := await signal_ref or get_tree().create_timer(timeout).timeout
+    return results[0] if results else null
+
+# Race pattern — first signal to fire wins
+func wait_for_any(signals: Array[Signal]) -> void:
+    for sig in signals:
+        sig.connect(func(): _race_won = true, CONNECT_ONE_SHOT)
+    while not _race_won:
+        await get_tree().process_frame
+```
 
 ### Dependency Injection (DI)
 Decouple classes from their dependencies by passing dependencies in during initialization or setup.
@@ -464,6 +542,9 @@ func _ready() -> void:
 8. **Avoid `_process` when possible** — use `_physics_process` for game logic
 9. **Use `await` carefully** — can cause issues if node is freed during await
 10. **Group related nodes** — `add_to_group("enemies")` for easy queries
+11. **Use `StringName` (`&"literal"`)** for signal/property keys — faster than String
+12. **Prefer `@export_storage`** for data that needs serialization but not editor exposure
+13. **Use `@warning_ignore` sparingly** — fix the root cause first
 
 ## Common Errors and Fixes
 

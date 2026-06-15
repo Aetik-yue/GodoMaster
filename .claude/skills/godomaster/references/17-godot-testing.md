@@ -94,6 +94,56 @@ assert_object(player).is_instanceof(Player)
 # Arrays & Dictionaries
 assert_array(inventory).has_size(5)
 assert_array(inventory).contains(["sword", "shield"])
+
+# Files (4.4+ era GdUnit4)
+assert_file("res://save.dat").exists()
+assert_file("res://save.dat").is_empty()
+
+# Fluent assertions
+assert_that(health).is_between(0, 100)
+```
+
+### Parameterized Tests (4.4+ era GdUnit4)
+
+Run the same test with different inputs for data-driven testing.
+
+```gdscript
+# Each set of parameters creates a separate test case
+@test_params([
+    [10, 20, 30],   # a=10, b=20, expected=30
+    [0, 0, 0],
+    [-5, 5, 0],
+    [100, -50, 50]
+])
+func test_addition(a: int, b: int, expected: int) -> void:
+    assert_int(a + b).is_equal(expected)
+```
+
+### Fuzz Testing
+
+Generate random inputs to find edge cases.
+
+```gdscript
+func test_damage_with_fuzz() -> void:
+    var fuzz_values := fuzz_int(0, 1000)  # Random ints 0-1000
+    for damage in fuzz_values:
+        health_comp.take_damage(damage)
+        assert_int(health_comp.current_health).is_between(0, health_comp.max_health)
+        health_comp.heal(health_comp.max_health)  # Reset for next iteration
+```
+
+### Spy vs Mock
+
+```gdscript
+# Spy: monitors real object, tracks method calls
+var real_db := Database.new()
+var spy_db := spy(real_db)
+# Real methods still execute, but calls are recorded
+
+# Mock: creates a fake object, no real logic
+var mock_db := mock(Database)
+# No real methods execute, you configure return values
+do_return(true).on(mock_db).save(any_string(), any())
 ```
 
 ---
@@ -216,9 +266,9 @@ jobs:
 
       - name: Setup Godot (Linux Headless)
         run: |
-          wget https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
-          unzip Godot_v4.3-stable_linux.x86_64.zip
-          sudo mv Godot_v4.3-stable_linux.x86_64 /usr/local/bin/godot
+          wget https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_linux.x86_64.zip
+          unzip Godot_v4.4.1-stable_linux.x86_64.zip
+          sudo mv Godot_v4.4.1-stable_linux.x86_64 /usr/local/bin/godot
           chmod +x /usr/local/bin/godot
 
       - name: Run Tests
@@ -235,3 +285,6 @@ jobs:
 - [ ] Instantiated nodes are disposed of using `auto_free()` or `queue_free()` in `after_test()`
 - [ ] Signals are monitored and asserted correctly
 - [ ] Headless test command succeeds in the terminal
+- [ ] GdUnit4 version matches Godot 4.x version
+- [ ] Parameterized tests used for data-driven scenarios
+- [ ] CI pipeline uses latest stable Godot for testing

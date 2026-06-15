@@ -1,6 +1,6 @@
 ---
 name: godot-architecture-tooling
-description: "Design modular systems using Custom Resources and extend the Godot editor using @tool scripts and plugins. Use when architecting databases, inventory data, configuring tool scripts, or building editor tools."
+description: "Design modular systems using Custom Resources, extend the Godot editor with @tool scripts and plugins, integrate C++ via GDExtension, and distribute addons. Use when architecting databases, inventory data, configuring tool scripts, building editor tools, or creating GDExtension modules."
 triggers:
   - "architecture"
   - "resource"
@@ -8,13 +8,17 @@ triggers:
   - "tool script"
   - "editor plugin"
   - "editorscript"
-  - "draw in editor"
   - "tres"
+  - "gdextension"
+  - "godot-cpp"
+  - "dependency injection"
+  - "autoload"
+  - "addon distribution"
 ---
 
 # Godot Architecture & Editor Tooling
 
-Build modular, data-driven games using custom Resources, and extend the Godot editor's capabilities using `@tool` scripts and custom plugins.
+Build modular, data-driven games using custom Resources, extend the editor with `@tool` scripts and plugins, and integrate C++ via GDExtension.
 
 ## Resource-Based Architecture
 
@@ -75,6 +79,78 @@ func load_player_stats(path: String) -> PlayerStats:
 
 ---
 
+## Autoload vs Singleton Patterns
+
+### Autoload Basics
+
+Autoloads are globally-accessible scripts that load before any scene. They are configured in **Project → Project Settings → Autoload**.
+
+```gdscript
+# res://scripts/core/game_manager.gd (registered as Autoload)
+extends Node
+
+var score: int = 0
+var is_paused: bool = false
+
+func add_score(points: int) -> void:
+    score += points
+```
+
+### When to Use Autoload vs `class_name` Static Access
+
+| Pattern | Best For | Pitfalls |
+|---------|----------|----------|
+| **Autoload** | Stateful managers (Audio, Save, Game), global event buses | Can create hidden dependencies, hard to test |
+| **`class_name` static** | Pure utility functions (Math, Constants), stateless helpers | No state persistence, can't reference scene tree |
+| **Resource injection** | Data-driven systems, testable components | More setup code |
+
+### Autoload Pitfalls
+
+```gdscript
+# BAD: Too many autoloads for communication
+# GameManager.gd, EnemyManager.gd, UIManager.gd, etc.
+# Everything talks to everything via autoloads → spaghetti
+
+# GOOD: Use signals and dependency injection for local communication
+# Reserve autoloads for truly global, cross-cutting concerns:
+# - AudioManager (plays sounds from anywhere)
+# - SaveManager (persists data)
+# - SignalBus (global events only)
+# - SceneManager (scene transitions)
+```
+
+### Dependency Injection in Godot
+
+```gdscript
+# Constructor injection (via _init or setup method)
+class_name PlayerController
+extends CharacterBody2D
+
+var _input_handler: InputHandler
+var _stats: PlayerStats
+
+func setup(input_handler: InputHandler, stats: PlayerStats) -> void:
+    _input_handler = input_handler
+    _stats = stats
+
+# Setter injection (via @export)
+@export var weapon: WeaponData:
+    set(value):
+        weapon = value
+        _update_weapon_display()
+
+# Resource-based injection
+@export var character_class: CharacterClass  # Resource with all class data
+
+# Owner pattern — parent injects dependencies into children
+func _ready() -> void:
+    for child in get_children():
+        if child has_method("setup"):
+            child.setup(self)
+```
+
+---
+
 ## Tool Scripts (`@tool`)
 
 The `@tool` annotation at the top of a script causes it to execute inside the editor workspace. This is useful for procedural generation, level design helpers, and visualizing changes in real-time without running the game.
@@ -106,6 +182,99 @@ func _draw() -> void:
 
 > [!WARNING]
 > Since `@tool` runs directly inside the editor, syntax or runtime errors can crash the editor viewport. Always use safety checks (`if Engine.is_editor_hint():`) around logic that interacts with game singletons or autoloads, as those do not exist in the editor.
+
+---
+
+## GDExtension
+
+GDExtension allows you to write performance-critical code in C++ (or other languages) and integrate it with Godot without recompiling the engine.
+
+### When to Use GDExtension vs GDScript
+
+| Criterion | GDScript | GDExtension (C++) |
+|-----------|----------|-------------------|
+| **Iteration speed** | ⚡ Instant | 🐢 Compile cycle |
+| **Performance** | Moderate | High |
+| **Library integration** | Limited | Full C/C++ library access |
+| **Team skills** | GDScript knowledge | C++ knowledge required |
+| **Debugging** | Editor debugger | GDB/LLDB, separate process |
+| **Distribution** | Text files, cross-platform | Compiled binaries per platform |
+| **Best for** | Game logic, prototyping | Physics, pathfinding, image processing, binding external libraries |
+
+### GDExtension Workflow
+
+```
+1. Clone godot-cpp: git clone https://github.com/godotengine/godot-cpp
+2. Create your C++ class
+3. Create .gdextension metadata file
+4. Build with SCons
+5. Copy .gdextension + compiled library to your Godot project
+6. Use the class like any other node/resource in GDScript
+```
+
+### C++ Class Example
+
+```cpp
+// src/math_utils.cpp
+#include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
+
+namespace godot {
+class MathUtils : public Node {
+    GDCLASS(MathUtils, Node)
+
+protected:
+    static void _bind_methods() {
+        ClassDB::bind_method(D_METHOD("clamp_angle", "angle", "min_angle", "max_angle"), &MathUtils::clamp_angle);
+    }
+
+public:
+    double clamp_angle(double angle, double min_angle, double max_angle) {
+        // Custom high-performance math function
+        return fmod(clamp(angle, min_angle, max_angle), Math_TAU);
+    }
+};
+} // namespace godot
+```
+
+### .gdextension File
+
+```ini
+# addons/math_utils/math_utils.gdextension
+[configuration]
+entry_symbol = "gdext_rust_init"  # or gdext_cpp_init
+compatibility_minimum = 4.3
+reloadable = true
+
+[libraries]
+windows.debug.x86_64 = "bin/math_utils.windows.debug.x86_64.dll"
+windows.release.x86_64 = "bin/math_utils.windows.release.x86_64.dll"
+linux.debug.x86_64 = "bin/math_utils.linux.debug.x86_64.so"
+linux.release.x86_64 = "bin/math_utils.linux.release.x86_64.so"
+macos.debug = "bin/math_utils.macos.debug.dylib"
+macos.release = "bin/math_utils.macos.release.dylib"
+```
+
+### Building with SCons
+
+```bash
+# Build for current platform
+scons platform=windows target=template_debug
+scons platform=windows target=template_release
+
+# The godot-cpp SConstruct file handles most of the build configuration
+# Ensure your SConstruct file points to the godot-cpp directory
+```
+
+### Using in GDScript
+
+```gdscript
+# After placing the .gdextension and compiled libraries in your project:
+var math_utils := MathUtils.new()
+var clamped := math_utils.clamp_angle(angle, -PI, PI)
+```
+
+> **Important:** The `godot-cpp` version must match your exact Godot version. Always update `godot-cpp` when upgrading Godot.
 
 ---
 
@@ -142,6 +311,40 @@ func _exit_tree() -> void:
         dock_instance.queue_free()
 ```
 
+### EditorInspectorPlugin
+
+Create custom inspector editors for your resource types.
+
+```gdscript
+# res://addons/my_plugin/inspector_plugin.gd
+@tool
+extends EditorInspectorPlugin
+
+func _can_handle(object: Object) -> bool:
+    return object is ItemData
+
+func _parse_property(object: Object, type: Variant.Type, name: String, hint_type: PropertyHint, hint_string: String, usage_flags: int, wide: bool) -> bool:
+    if name == "damage":
+        # Add a custom editor for the damage property
+        var custom_editor := preload("res://addons/my_plugin/damage_editor.tscn").instantiate()
+        custom_editor.setup(object as ItemData)
+        add_custom_control(custom_editor)
+        return true  # We handled this property
+    return false  # Use default editor for other properties
+```
+
+Register in your plugin:
+```gdscript
+var inspector_plugin: EditorInspectorPlugin
+
+func _enter_tree() -> void:
+    inspector_plugin = MyInspectorPlugin.new()
+    add_inspector_plugin(inspector_plugin)
+
+func _exit_tree() -> void:
+    remove_inspector_plugin(inspector_plugin)
+```
+
 ---
 
 ## EditorScript
@@ -167,10 +370,57 @@ func _run() -> void:
 
 ---
 
+## Plugin Distribution via AssetLib
+
+### Preparing Your Plugin
+
+```
+addons/your_plugin/
+├── plugin.cfg         # Required — plugin metadata
+├── plugin.gd          # Required — entry script
+├── README.md          # Recommended — usage documentation
+├── LICENSE            # Required — license file
+├── icons/             # Optional — editor icons
+└── scenes/            # Optional — dock scenes, inspector scenes
+```
+
+### plugin.cfg Reference
+
+```ini
+[plugin]
+name="Your Plugin"
+description="A helpful description of what your plugin does."
+author="Your Name"
+version="1.0.0"
+script="plugin.gd"
+```
+
+### Submitting to AssetLib
+
+1. Go to https://godotengine.org/asset-library
+2. Create an account
+3. Click **Submit Asset**
+4. Fill in: name, category, version, **Godot version compatibility**, description
+5. Upload a ZIP of the `addons/your_plugin/` directory
+6. Add screenshots and documentation links
+7. Wait for review (typically 1–3 days)
+
+### Version Compatibility
+
+Always declare the minimum and maximum Godot version your plugin supports. Test with each new Godot release and update the compatibility range.
+
+---
+
 ## Verification Checklist
+
 - [ ] Custom Resource classes are declared with `class_name`
 - [ ] Resource properties are annotated with `@export`
 - [ ] `@tool` scripts check `Engine.is_editor_hint()` before accessing autoloads or tree elements
 - [ ] Properties affecting visual elements in `@tool` scripts implement setters that trigger updates (e.g., `queue_redraw()`)
 - [ ] Custom EditorPlugins implement cleanup code in `_exit_tree()`
 - [ ] EditorScripts inherit from `EditorScript` and implement `_run()`
+- [ ] Autoloads used judiciously, not as a default communication pattern
+- [ ] GDExtension considered for performance-critical or C++ library integration
+- [ ] Plugin distribution follows AssetLib conventions and includes `plugin.cfg`
+- [ ] EditorInspectorPlugin registered and unregistered properly
+- [ ] .gdextension file lists all target platform libraries

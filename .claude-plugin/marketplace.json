@@ -5,15 +5,15 @@
     "name": "yanha"
   },
   "metadata": {
-    "description": "GodoMaster — Godot 4.x game development intelligence with GDScript patterns, node architecture, 2D/3D workflows, physics, animation, UI, audio, shaders, networking, and performance optimization.",
-    "version": "1.0.0"
+    "description": "GodoMaster — Godot 4.x game development intelligence with GDScript patterns, node architecture, 2D/3D workflows, physics, animation, UI, audio, shaders, networking, localization, AI behavior, asset pipeline, and performance optimization.",
+    "version": "2.0.0"
   },
   "plugins": [
     {
       "name": "godomaster",
       "source": "./",
-      "description": "Complete Godot 4.x game development skill — GDScript, scene architecture, 2D/3D rendering, physics, animation, UI design, audio systems, input handling, shaders, networking, performance optimization, export pipelines, and file I/O. Based on official Godot documentation.",
-      "version": "1.0.0",
+      "description": "Complete Godot 4.x game development skill — GDScript, scene architecture, 2D/3D rendering, physics, animation, UI design, audio systems, input handling, shaders, networking, localization, AI behavior, asset pipeline, performance optimization, export pipelines, and file I/O. Based on official Godot documentation.",
+      "version": "2.0.0",
       "author": {
         "name": "yanha"
       },

@@ -30,7 +30,10 @@ A comprehensive Claude Code skill for Godot 4.x game development. Based on the o
 | **Shaders** | 2D effects (dissolve, outline, water), 3D materials (hologram, force field), post-processing |
 | **Networking** | ENet, RPC, MultiplayerSpawner/Synchronizer, lobby, client prediction |
 | **Testing** | GdUnit4 framework, unit testing, scene testing, mocking, CI/CD pipelines |
-| **Architecture** | Custom Resource architecture, @tool scripts, EditorPlugin, EditorScript |
+| **Architecture** | Custom Resource architecture, @tool scripts, GDExtension (C++), EditorPlugin, EditorScript |
+| **Localization** | tr(), TranslationServer, .po/.csv import, plural rules, pseudolocalization, RTL |
+| **AI Behavior** | State machines, behavior trees, utility AI, NavigationAgent pathfinding/avoidance, LimboAI |
+| **Asset Pipeline** | ResourceImporter, EditorImportPlugin, custom loaders/savers, addon ecosystem |
 
 ## Installation
 
@@ -71,6 +74,9 @@ Copy to `~/.claude/skills/godomaster/`:
         ├── 02-godot-editor-mastery.md
         ├── ...
         └── 18-godot-architecture-tooling.md
+        ├── 19-godot-localization.md
+        ├── 20-godot-ai-behavior.md
+        └── 21-godot-asset-pipeline.md
 ```
 
 ### Claude Marketplace (plugin)
@@ -105,7 +111,7 @@ If you use Godot-related Agents like `godot-master`, you can wire them to the sk
 When detailed technical reference is needed, read the following GodoMaster skill files:
 
 - **Entry point**: `~/.claude/skills/godomaster/SKILL.md` (routing index + quick reference)
-- **Reference directory**: `~/.claude/skills/godomaster/references/`, 18 modules total
+- **Reference directory**: `~/.claude/skills/godomaster/references/`, 21 modules total
 
 | File | Content |
 |------|---------|
@@ -115,7 +121,10 @@ When detailed technical reference is needed, read the following GodoMaster skill
 | ... | ... |
 | `16-godot-networking.md` | ENet, RPC, synchronizers, lobbies |
 | `17-godot-testing.md` | GdUnit4, unit/scene testing, mocking, CI/CD |
-| `18-godot-architecture-tooling.md` | Custom Resources, @tool scripts, EditorPlugin, EditorScript |
+| `18-godot-architecture-tooling.md` | Custom Resources, @tool scripts, GDExtension, EditorPlugin, EditorScript |
+| `19-godot-localization.md` | Localization, tr(), TranslationServer, plural rules, pseudolocalization |
+| `20-godot-ai-behavior.md` | State machines, behavior trees, utility AI, navigation AI, LimboAI |
+| `21-godot-asset-pipeline.md` | ResourceImporter, EditorImportPlugin, addon ecosystem |
 ```
 
 Once configured, the Agent will consult these references when answering Godot questions, sharing the same knowledge base as the Skill.
@@ -135,7 +144,7 @@ GodoMaster/
 │   └── marketplace.json          # Marketplace listing
 ├── .claude/skills/godomaster/
 │   ├── SKILL.md                  # Main skill (routing + quick ref)
-│   └── references/               # 18 detailed reference files
+│   └── references/               # 21 detailed reference files
 │       ├── 01-godot-project-setup.md
 │       ├── 02-godot-editor-mastery.md
 │       ├── 03-gdscript-pro.md

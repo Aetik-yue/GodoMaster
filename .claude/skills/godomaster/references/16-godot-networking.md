@@ -93,6 +93,64 @@ func _on_connection_failed() -> void:
     print("Connection failed!")
 ```
 
+### WebSocketMultiplayerPeer
+
+Use WebSocket for web-compatible multiplayer — works through firewalls and proxies.
+
+```gdscript
+# Server
+func start_ws_server(port: int = 8915) -> void:
+    var peer := WebSocketMultiplayerPeer.new()
+    peer.create_server(port)
+    multiplayer.multiplayer_peer = peer
+
+# Client
+func join_ws_server(url: String) -> void:
+    var peer := WebSocketMultiplayerPeer.new()
+    var err := peer.create_client(url)
+    if err != OK:
+        push_error("WebSocket connection failed: %d" % err)
+        return
+    multiplayer.multiplayer_peer = peer
+```
+
+> **When to use WebSocket vs ENet:** Use WebSocket when targeting web browsers, or when you need to traverse corporate firewalls. ENet (UDP) is better for latency-sensitive games on desktop/mobile.
+
+### WebRTCMultiplayerPeer
+
+Use WebRTC for peer-to-peer connections with NAT traversal.
+
+```gdscript
+# Mesh topology (all peers connect to each other)
+func create_webrtc_mesh() -> void:
+    var peer := WebRTCMultiplayerPeer.new()
+    peer.create_mesh(1)  # 1 = this peer's ID
+    multiplayer.multiplayer_peer = peer
+
+# With a signaling server (required for WebRTC):
+# 1. Exchange ICE candidates and SDP via your signaling server
+# 2. Create WebRTCPeerConnection for each remote peer
+# 3. Add connections to the multiplayer peer
+```
+
+> **Requirements:** WebRTC needs a STUN server for NAT traversal and optionally a TURN server for relay. You must implement a signaling server (WebSocket or REST) to exchange connection details before peers can connect.
+
+### SteamMultiplayerPeer
+
+Available via the [GodotSteam](https://github.com/GodotSteam/GodotSteam) addon.
+
+```gdscript
+# After installing GodotSteam addon:
+# 1. Initialize Steam API
+# 2. Create a Steam lobby or join one
+# 3. Use SteamMultiplayerPeer for Godot's MultiplayerAPI
+
+# Note: SteamMultiplayerPeer integrates with Steam's networking
+# - Automatic NAT traversal via Steam relay
+# - Lobby system built in
+# - Requires Steamworks SDK and GodotSteam addon
+```
+
 ## RPC (Remote Procedure Calls)
 
 ### RPC Syntax
@@ -396,6 +454,43 @@ func reconcile(server_pos: Vector2, server_frame: int) -> void:
 9. **Test with simulated lag** — add artificial latency
 10. **Handle disconnections gracefully** — cleanup, reconnect
 
+## Matchmaking Services
+
+For public multiplayer games, you need a matchmaking service to connect players.
+
+### Custom REST Matchmaker
+
+```gdscript
+# Simple REST-based matchmaker
+class_name Matchmaker
+extends Node
+
+var base_url := "https://your-server.com/api"
+
+func find_match(player_id: String) -> Dictionary:
+    var http := HTTPRequest.new()
+    add_child(http)
+    var url := "%s/match?player=%s" % [base_url, player_id]
+    http.request(url)
+    var result := await http.request_completed
+    # Parse response → get server IP + port
+    var body := result[3].get_string_from_ascii()
+    var data := JSON.parse_string(body) as Dictionary
+    http.queue_free()
+    return data  # {"host": "1.2.3.4", "port": 8915}
+```
+
+### Third-Party Services
+
+| Service | Type | Features |
+|---------|------|----------|
+| **Nakama** | Self-hosted / Cloud | Matchmaking, leaderboards, chat, accounts. Godot client SDK available. |
+| **Epic Online Services (EOS)** | Free | Lobbies, matchmaking, P2P networking, anti-cheat. Requires Epic account. |
+| **PlayFab** | Cloud | Matchmaking, player data, commerce. REST API. |
+| **Custom server** | Self-hosted | Full control, custom REST/WebSocket matchmaker + dedicated game server. |
+
+> **Recommendation:** For indie games, start with a simple REST matchmaker + ENet relay server. Graduate to Nakama or EOS when you need scaling features.
+
 ## Verification Checklist
 - [ ] MultiplayerAPI configured
 - [ ] Server/client connection working
@@ -406,3 +501,6 @@ func reconcile(server_pos: Vector2, server_frame: int) -> void:
 - [ ] Input sent from client, processed on server
 - [ ] Remote entities interpolated
 - [ ] Disconnection handling
+- [ ] Chosen correct peer type (ENet, WebSocket, WebRTC) for target platforms
+- [ ] WebRTC STUN/TURN configured if using P2P
+- [ ] Matchmaking service integrated (if multiplayer is public)

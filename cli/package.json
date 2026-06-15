@@ -1,6 +1,6 @@
 {
   "name": "godomaster-skill",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "GodoMaster — Claude Code skill for Godot 4.x game development. GDScript, nodes/scenes, 2D/3D, physics, animation, UI, audio, input, shaders, networking, performance, export, file I/O, testing, and architecture/tooling.",
   "bin": {
     "godomaster-skill": "bin/install.js",

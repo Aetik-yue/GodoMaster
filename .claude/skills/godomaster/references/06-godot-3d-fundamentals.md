@@ -188,6 +188,29 @@ WorldEnvironment
         └── Filter Size: 3-5
 ```
 
+### Custom Fog Shader (4.3+)
+Use `shader_type fog;` for custom volumetric fog rendering when built-in fog isn't sufficient.
+
+```gdshader
+shader_type fog;
+
+// Custom fog shader — animated swirling fog
+void fog() {
+    // Access: WORLD_POSITION, UVW (voxel coordinates)
+    // Modify: ALBEDO, DENSITY, EMISSION
+    float time = TIME;
+    vec3 pos = WORLD_POSITION;
+
+    // Swirling density pattern
+    float swirl = sin(pos.x * 2.0 + time) * cos(pos.z * 2.0 + time * 0.7);
+    DENSITY = max(0.0, 0.02 + swirl * 0.01);
+
+    ALBEDO = vec3(0.8, 0.85, 0.9);  // Light blue-ish fog
+}
+```
+
+> **Note:** Custom fog shaders only work with the Forward+ renderer, not the Compatibility renderer.
+
 ## Environment
 
 ### WorldEnvironment Setup
@@ -407,6 +430,85 @@ func _physics_process(delta: float) -> void:
     move_and_slide()
 ```
 
+## Decal Node
+
+Project textures onto geometry — useful for bullet holes, splatter, road markings, and detail overlays.
+
+```gdscript
+# res://scripts/effects/bullet_hole.gd
+extends Decal
+
+func _ready() -> void:
+    # Textures: albedo, normal, emission
+    texture_albedo = preload("res://art/effects/bullet_hole_albedo.png")
+    texture_normal = preload("res://art/effects/bullet_hole_normal.png")
+
+    # Size of the projection
+    size = Vector3(0.2, 0.2, 0.5)
+
+    # Fade over time
+    modulate.a = 1.0
+    var tween := create_tween()
+    tween.tween_property(self, "modulate:a", 0.0, 5.0)
+    tween.tween_callback(queue_free)
+```
+
+```
+# Spawning a decal at a raycast hit:
+func _on_bullet_hit(position: Vector3, normal: Vector3) -> void:
+    var decal := BulletHoleScene.instantiate() as Decal
+    get_parent().add_child(decal)
+    decal.global_position = position + normal * 0.01  # Slight offset
+    decal.look_at(position + normal, Vector3.UP)       # Face the surface
+```
+
+### Navigation Mesh Baking Improvements (4.3+)
+
+```gdscript
+# Runtime rebaking — useful for dynamic level changes
+func rebake_navigation() -> void:
+    var region := %NavigationRegion3D as NavigationRegion3D
+    region.bake_navigation_mesh()
+
+# Source geometry mode improvements (4.3+)
+# In NavigationMesh resource:
+# - geometry_source: ROOT_NODE_CHILDREN or GROUPS
+# - geometry_collision_mask: filter which collision shapes are included
+# - agent_radius: affects nav mesh border offset
+```
+
+### Navigation Avoidance (4.4+)
+
+Enable RVO-based avoidance so agents don't collide with each other.
+
+```gdscript
+@onready var nav_agent := $NavigationAgent3D
+
+func _ready() -> void:
+    # Enable avoidance
+    nav_agent.avoidance_enabled = true
+    nav_agent.radius = 0.5
+    nav_agent.neighbor_distance = 5.0
+    nav_agent.max_neighbors = 10
+    nav_agent.time_horizon = 0.5
+    nav_agent.max_speed = 5.0
+
+    # Listen for computed velocity
+    nav_agent.velocity_computed.connect(_on_velocity_computed)
+
+func _physics_process(_delta: float) -> void:
+    if nav_agent.is_navigation_finished():
+        return
+    var next_pos := nav_agent.get_next_path_position()
+    var direction := (next_pos - global_position).normalized()
+    var desired_velocity := direction * nav_agent.max_speed
+    nav_agent.set_velocity(desired_velocity)
+
+func _on_velocity_computed(safe_velocity: Vector3) -> void:
+    velocity = safe_velocity
+    move_and_slide()
+```
+
 ## Verification Checklist
 - [ ] Coordinate system understood (Y-up)
 - [ ] 3D models imported correctly (.glb preferred)
@@ -416,3 +518,6 @@ func _physics_process(delta: float) -> void:
 - [ ] Camera3D with proper controls
 - [ ] CharacterBody3D with gravity and movement
 - [ ] Navigation mesh baked for AI pathfinding
+- [ ] Custom fog shader used if built-in fog is insufficient
+- [ ] Navigation avoidance enabled for moving agents (4.4+)
+- [ ] Decal node used for surface projections (if needed)

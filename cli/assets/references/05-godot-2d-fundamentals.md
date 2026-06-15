@@ -91,6 +91,8 @@ TileMapLayer node
 └── Painted tiles
 ```
 
+> **Migration Note (4.3+):** The old `TileMap` node is **deprecated** in Godot 4.3+. Use `TileMapLayer` instead. Each `TileMapLayer` represents a single layer; for multiple layers, use multiple `TileMapLayer` nodes as siblings. Key differences: better batching performance, cleaner API, and `TileMapLayer` uses `TileSet` the same way. To migrate: replace `TileMap` nodes with `TileMapLayer` (one per layer) and update `get_cell_*` calls to use the new API.
+
 ### Creating a TileSet
 1. Add `TileMapLayer` node
 2. Click on TileSet in Inspector → New TileSet
@@ -137,6 +139,53 @@ func _ready() -> void:
     if tile_data:
         var is_solid: bool = tile_data.get_custom_data("solid")
         var damage: int = tile_data.get_custom_data("damage")
+```
+
+### TileMapPattern (4.3+)
+Copy and paste tile patterns as reusable resources.
+
+```gdscript
+# Get a pattern from painted tiles
+var pattern := get_pattern(Rect2i(Vector2i(0, 0), Vector2i(3, 3)))
+
+# Set a pattern at a position
+set_pattern(position, pattern)
+
+# Save pattern as .tres for reuse
+ResourceSaver.save(pattern, "res://resources/tile_patterns/corner.tres")
+
+# Load and use a saved pattern
+var saved_pattern := load("res://resources/tile_patterns/corner.tres") as TileMapPattern
+set_pattern(target_pos, saved_pattern)
+```
+
+### TileSetScenesCollectionSource (4.3+)
+Place scenes (not just tiles) in a TileMapLayer — ideal for props, interactable objects, or tiles that need scripts.
+
+```
+1. Open TileSet editor
+2. Add a new Source → select "Scenes Collection"
+3. Drag .tscn files into the source
+4. Configure scene properties (size, collision, navigation)
+5. Paint scene tiles just like regular tiles
+```
+
+```gdscript
+# Scene tiles are instantiated as regular nodes when placed
+# They can have their own scripts and signals
+# Useful for: chests, doors, switches, NPCs placed on a tile grid
+```
+
+### Per-Tile Physics Material
+Set physics material (friction/bounce) per tile in the TileSet for varied surface behavior.
+
+```gdscript
+# In TileSet editor → Physics layer → select tiles
+# Each tile can have its own collision polygon and physics material
+# For runtime access:
+if tile_data:
+    var physics_material: PhysicsMaterial = tile_data.get_custom_data("physics_material")
+```
 ```
 
 ### TileMap Best Practices
@@ -302,7 +351,9 @@ func zoom_in(target_zoom: Vector2 = Vector2(2, 2), duration: float = 0.5) -> voi
 ## Verification Checklist
 - [ ] Coordinate system understood (Y-down)
 - [ ] Sprite2D or AnimatedSprite2D configured
-- [ ] TileMapLayer with physics collision set up
+- [ ] Using TileMapLayer (not deprecated TileMap) with physics collision
+- [ ] TileMapPattern used for reusable tile arrangements (if needed)
+- [ ] TileSetScenesCollectionSource for scene-based tiles (if needed)
 - [ ] Parallax layers with correct motion scales
 - [ ] Lighting with shadows if needed
 - [ ] Camera2D with smoothing and limits

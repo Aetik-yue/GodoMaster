@@ -1,7 +1,7 @@
 {
   "name": "godomaster",
-  "description": "GodoMaster — Godot 4.x game development intelligence: GDScript, nodes/scenes, 2D/3D, physics, animation, UI, audio, input, shaders, networking, performance, export, and file I/O. Complete workflow for indie and professional game development based on official Godot documentation.",
-  "version": "1.0.0",
+  "description": "GodoMaster — Godot 4.x game development intelligence: GDScript, nodes/scenes, 2D/3D, physics, animation, UI, audio, input, shaders, networking, performance, export, file I/O, localization, AI behavior, asset pipeline, and architecture tooling. Complete workflow for indie and professional game development based on official Godot documentation.",
+  "version": "2.0.0",
   "author": {
     "name": "yanha"
   },

@@ -1,5 +1,12 @@
 # GodoMaster
 
+<p align="center">
+  <img src="https://github.com/Aetik-yue/GodoMaster/raw/main/icon.png" width="128" height="128" alt="GodoMaster"><br>
+  <img src="https://img.shields.io/github/stars/aetik-yue/GodoMaster?style=flat-square&label=stars" alt="Stars">
+</p>
+
+[**English**](README.en.md) | **简体中文**
+
 基于 Godot 官方文档打造的 Claude Code 游戏开发技能包，覆盖 Godot 4.x 完整开发工作流。
 
 ## 包含内容
@@ -23,7 +30,10 @@
 | **着色器** | 2D 特效（溶解、描边、水面）、3D 材质（全息、力场）、后处理 |
 | **网络联机** | ENet、RPC、MultiplayerSpawner/Synchronizer、大厅、客户端预测 |
 | **单元测试** | GdUnit4 框架、单元测试、场景测试、Mock 模拟、CI/CD 自动化集成 |
-| **架构与工具** | 自定义 Resource 架构、@tool 脚本、EditorPlugin、EditorScript |
+| **架构与工具** | 自定义 Resource 架构、@tool 脚本、GDExtension (C++)、EditorPlugin、EditorScript |
+| **本地化** | tr()、TranslationServer、.po/.csv 导入、复数规则、伪本地化、RTL |
+| **AI 行为** | 状态机、行为树、效用 AI、NavigationAgent 寻路/避障、LimboAI |
+| **资产管线** | ResourceImporter、EditorImportPlugin、自定义加载器/保存器、Addon 生态 |
 
 ## 安装方式
 
@@ -59,11 +69,14 @@ curl -fsSL https://raw.githubusercontent.com/yanha/GodoMaster/main/install.sh | 
 ~/.claude/skills/
 └── godomaster/
     ├── SKILL.md              ← 主入口（路由 + 快速参考）
-    └── references/           ← 18 个详细参考文档
+    └── references/           ← 21 个详细参考文档
         ├── 01-godot-project-setup.md
         ├── 02-godot-editor-mastery.md
         ├── ...
         └── 18-godot-architecture-tooling.md
+        ├── 19-godot-localization.md           # 本地化
+        ├── 20-godot-ai-behavior.md            # AI 行为系统
+        └── 21-godot-asset-pipeline.md         # 资产管线
 ```
 
 ### Claude 插件市场
@@ -93,13 +106,52 @@ curl -fsSL https://raw.githubusercontent.com/yanha/GodoMaster/main/install.sh | 
 | "搭建主菜单 UI" | UI 设计 |
 | "添加背景音乐和音效" | 音频系统 |
 
+## Agent 集成（可选）
+
+如果你在使用 `godot-master` 等 Godot 相关的 Agent，可以让 Agent 也能调用技能包的知识库。编辑 Agent 的配置文件（如 `~/.claude/agents/godot-master.md`），在「知识范围」段落前添加：
+
+```markdown
+## 知识库
+
+当需要查阅详细技术参考时，读取以下 GodoMaster 技能包文件：
+
+- **主入口**：`~/.claude/skills/godomaster/SKILL.md`（路由索引 + 快速参考）
+- **参考文档目录**：`~/.claude/skills/godomaster/references/`，共 21 个模块
+
+| 文件 | 内容 |
+|------|------|
+| `01-godot-project-setup.md` | 项目配置、渲染器、目录结构、自动加载 |
+| `02-godot-editor-mastery.md` | 编辑器快捷键、面板、调试工具 |
+| `03-gdscript-pro.md` | GDScript 类型系统、信号、状态机、对象池 |
+| `04-godot-nodes-scenes.md` | 节点参考、场景组合、生命周期、组件模式 |
+| `05-godot-2d-fundamentals.md` | 精灵、TileMap、视差、2D 光照、相机 |
+| `06-godot-3d-fundamentals.md` | 模型导入、PBR 材质、灯光、环境、导航 |
+| `07-godot-physics.md` | 碰撞层、受击箱、射线检测、刚体、关节 |
+| `08-godot-animation.md` | AnimationPlayer、Tween、AnimationTree |
+| `09-godot-ui-design.md` | Control 节点、布局、锚点、主题、对话系统 |
+| `10-godot-audio.md` | 音频总线、音效池、空间音频、动态音乐 |
+| `11-godot-input-system.md` | Input Map、手柄、触屏、按键重映射 |
+| `12-godot-export-deploy.md` | 导出预设、CI/CD、Steam/itch.io |
+| `13-godot-performance.md` | 性能分析、DrawCall、MultiMesh、对象池 |
+| `14-godot-file-io.md` | 存档系统、JSON、ConfigFile、加密 |
+| `15-godot-shaders.md` | 画布着色器、空间着色器、后处理 |
+| `16-godot-networking.md` | ENet、RPC、同步器、大厅、客户端预测 |
+| `17-godot-testing.md` | GdUnit4、单元与集成测试、PlayGodot 自动化、CI/CD |
+| `18-godot-architecture-tooling.md` | 自定义 Resource、@tool 脚本、GDExtension、EditorPlugin、EditorScript |
+| `19-godot-localization.md` | 本地化、tr()、TranslationServer、复数规则、伪本地化 |
+| `20-godot-ai-behavior.md` | 状态机、行为树、效用 AI、导航 AI、LimboAI |
+| `21-godot-asset-pipeline.md` | ResourceImporter、EditorImportPlugin、Addon 生态 |
+```
+
+配置完成后，Agent 在回答 Godot 问题时会自动查阅这些参考文档，与 Skill 共用同一套知识库。
+
 ## 项目结构
 
 ```
 GodoMaster/
 ├── skill.json                    # 技能元数据
-├── README.md                     # 英文文档
-├── README.zh-cn.md               # 中文文档（本文件）
+├── README.md                     # 中文文档（主页）
+├── README.en.md                  # 英文文档
 ├── CLAUDE.md                     # 项目指引
 ├── install.sh                    # Shell 安装脚本
 ├── .gitignore
@@ -108,7 +160,7 @@ GodoMaster/
 │   └── marketplace.json          # 市场上架配置
 ├── .claude/skills/godomaster/
 │   ├── SKILL.md                  # 主技能（路由 + 快速参考）
-│   └── references/               # 18 个详细参考文档
+│   └── references/               # 21 个详细参考文档
 │       ├── 01-godot-project-setup.md     # 项目配置
 │       ├── 02-godot-editor-mastery.md    # 编辑器精通
 │       ├── 03-gdscript-pro.md            # GDScript 进阶
@@ -127,6 +179,9 @@ GodoMaster/
 │       ├── 16-godot-networking.md        # 网络联机
 │       ├── 17-godot-testing.md           # 单元测试与 CI
 │       └── 18-godot-architecture-tooling.md # 架构与编辑器工具
+│       ├── 19-godot-localization.md          # 本地化
+│       ├── 20-godot-ai-behavior.md           # AI 行为系统
+│       └── 21-godot-asset-pipeline.md        # 资产管线
 ├── cli/
 │   ├── package.json              # NPM 包配置
 │   ├── bin/install.js            # 安装脚本

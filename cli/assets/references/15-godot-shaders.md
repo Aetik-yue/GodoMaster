@@ -57,6 +57,17 @@ shader_type sky;
 // Custom sky rendering
 ```
 
+### Fog Shader (4.3+)
+```
+shader_type fog;
+
+// Applied to WorldEnvironment volumetric fog
+// Available functions: fog(), voxel()
+// Access: WORLD_POSITION, UVW (voxel coordinates)
+// Modify: ALBEDO, DENSITY, EMISSION
+// Note: Only works with Forward+ renderer
+```
+
 ## CanvasItem (2D) Shaders
 
 ### Color Tint
@@ -357,6 +368,59 @@ func dissolve_animation(duration: float = 1.0) -> void:
 9. **Comment complex math** — shaders are hard to read
 10. **Use visual shader** for prototyping — convert to code later
 
+## Shader Preprocessor
+
+Godot's shader preprocessor allows code organization and conditional compilation.
+
+```gdshader
+// #define — constants and conditional flags
+#define USE_FOG
+#define MAX_LIGHTS 4
+
+// #include — include shared code snippets (4.3+)
+#include "res://shaders/shared/lighting_utils.gdshaderinc"
+
+// #if / #ifdef / #ifndef / #else / #endif — conditional compilation
+#ifdef USE_FOG
+    // Fog calculation code
+    COLOR.rgb = mix(COLOR.rgb, fog_color, fog_factor);
+#endif
+
+// #pragma — compiler directives
+#pragma disable_preprocessor  // Turn off preprocessor for this file
+
+// Include guards for shared snippets
+#ifndef LIGHTING_UTILS_GDSHADERINC
+#define LIGHTING_UTILS_GDSHADERINC
+// ... shared lighting functions
+#endif
+```
+
+> **Tip:** Use `#include` to share utility functions across shaders. Create `.gdshaderinc` files for common operations like noise, lighting helpers, or color space conversions.
+
+## Compatibility Renderer Considerations
+
+The Compatibility renderer (for mobile/web/low-end) has shader limitations compared to Forward+.
+
+| Feature | Forward+ | Compatibility |
+|---------|----------|--------------|
+| Spatial shader `LIGHT` function | ✅ Full support | ⚠️ Limited (no custom lighting) |
+| `shader_type fog` | ✅ Supported | ❌ Not supported |
+| `render_mode depth_draw_opaque` | ✅ | ✅ |
+| `render_mode cull_disabled` | ✅ | ✅ |
+| Screen textures (`SCREEN_TEXTURE`) | ✅ | ⚠️ Limited |
+| `DEPTH_TEXTURE` | ✅ | ❌ Not available |
+
+```gdshader
+// Fallback pattern: detect renderer in shader
+// Note: Shaders can't directly detect renderer, but you can:
+// 1. Use a uniform to toggle features
+uniform bool is_mobile = false;
+
+// 2. Or create separate shader variants for each renderer
+// 3. Test on Compatibility renderer if targeting mobile/web
+```
+
 ## Verification Checklist
 - [ ] Shader type correct (canvas_item for 2D, spatial for 3D)
 - [ ] Uniforms exposed with proper hints
@@ -364,3 +428,6 @@ func dissolve_animation(duration: float = 1.0) -> void:
 - [ ] Shader parameters settable from GDScript
 - [ ] Visual effects match design intent
 - [ ] No visual artifacts at edges/corners
+- [ ] Custom fog shader uses `shader_type fog` (if using volumetric fog customization)
+- [ ] Shader preprocessor used for variant management (if needed)
+- [ ] Shaders tested on Compatibility renderer if targeting mobile/web

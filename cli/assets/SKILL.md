@@ -1,16 +1,16 @@
 ---
 name: godomaster
-description: "GodoMaster — Godot 4.x game development intelligence: GDScript, nodes/scenes, 2D/3D rendering, physics, animation, UI, audio, input, shaders, networking, performance, export, file I/O, testing, and architecture tooling. Complete workflow for indie and professional game development based on official Godot documentation."
+description: "GodoMaster — Godot 4.x game development intelligence: GDScript, nodes/scenes, 2D/3D rendering, physics, animation, UI, audio, input, shaders, networking, performance, export, file I/O, testing, localization, AI behavior, asset pipeline, and architecture tooling. Complete workflow for indie and professional game development based on official Godot documentation."
 argument-hint: "[topic] [context]"
 license: MIT
 metadata:
   author: yanha
-  version: "1.1.0"
+  version: "2.0.0"
 ---
 
 # GodoMaster
 
-Complete Godot 4.x game development skill: project setup, GDScript, scene architecture, 2D/3D, physics, animation, UI, audio, input, shaders, networking, performance, export, and data persistence.
+Complete Godot 4.x game development skill: project setup, GDScript, scene architecture, 2D/3D, physics, animation, UI, audio, input, shaders, networking, performance, export, data persistence, localization, AI behavior, and asset pipeline.
 
 ## When to Use
 
@@ -34,6 +34,10 @@ This Skill must be invoked in the following situations:
 - Exporting to platforms (Windows, Mac, Linux, Web, Mobile)
 - Optimizing performance (profiling, draw calls, memory)
 - Implementing save/load and file I/O
+- Implementing localization or multi-language support (tr(), TranslationServer)
+- Building AI behavior systems (state machines, behavior trees, utility AI)
+- Working with the asset import pipeline (ResourceImporter, EditorImportPlugin, addons)
+- Creating GDExtension modules (C++ integration, godot-cpp)
 
 ## Sub-skill Routing
 
@@ -53,10 +57,13 @@ This Skill must be invoked in the following situations:
 | Export, CI/CD, store publishing | `references/12-godot-export-deploy.md` | Platform presets, optimization, distribution |
 | Profiling, FPS, draw calls | `references/13-godot-performance.md` | Monitors, batching, pooling, culling |
 | Save/load, JSON, config files | `references/14-godot-file-io.md` | SaveManager, ConfigFile, encryption |
-| Shaders, visual effects | `references/15-godot-shaders.md` | CanvasItem, Spatial, post-processing |
-| Multiplayer, RPC, sync | `references/16-godot-networking.md` | ENet, lobby, state synchronization |
-| Unit tests, integration tests, CI | `references/17-godot-testing.md` | GdUnit4, mocking, scene tests, PlayGodot, headless CLI |
-| Custom Resources, @tool, plugins | `references/18-godot-architecture-tooling.md` | Resource-based architecture, @tool scripts, EditorPlugin, EditorScript |
+| Shaders, visual effects | `references/15-godot-shaders.md` | CanvasItem, Spatial, fog, post-processing |
+| Multiplayer, RPC, sync | `references/16-godot-networking.md` | ENet, WebSocket, WebRTC, lobby, matchmaking |
+| Unit tests, integration tests, CI | `references/17-godot-testing.md` | GdUnit4, mocking, scene tests, headless CLI |
+| Custom Resources, @tool, plugins, GDExtension | `references/18-godot-architecture-tooling.md` | Resource-based architecture, @tool, GDExtension, EditorPlugin |
+| Localization, tr(), TranslationServer | `references/19-godot-localization.md` | .po/.csv import, plural rules, pseudolocalization, RTL |
+| AI, behavior trees, utility AI | `references/20-godot-ai-behavior.md` | State machines, BT pattern, navigation AI, LimboAI |
+| Asset pipeline, import plugins, addons | `references/21-godot-asset-pipeline.md` | ResourceImporter, EditorImportPlugin, AssetLib distribution |
 
 ## Quick Reference
 
@@ -72,6 +79,7 @@ signal health_changed(new_health: int)
 
 @export var max_health := 100
 @export_range(0, 100) var start_health := 100
+@export_storage var internal_state: int = 0  # 4.4+ serialized but hidden
 
 @onready var sprite := $Sprite2D
 @onready var animation := $AnimationPlayer
@@ -90,6 +98,28 @@ func _physics_process(delta: float) -> void:
     var direction := Input.get_axis("move_left", "move_right")
     velocity.x = direction * speed
     move_and_slide()
+```
+
+### Localization Quick Pattern
+
+```gdscript
+# Localization
+func _ready() -> void:
+    label.text = tr("KEY_GREETING")
+    count_label.text = tr_n("1 enemy", "%d enemies", count) % count
+    TranslationServer.set_locale("zh_CN")
+```
+
+### AI Quick Pattern
+
+```gdscript
+# Behavior tree tick pattern
+func _physics_process(delta: float) -> void:
+    behavior_tree.tick(self, blackboard)
+
+# NavigationAgent avoidance (4.4+)
+nav_agent.avoidance_enabled = true
+nav_agent.set_velocity(desired_velocity)
 ```
 
 ### Scene Composition Patterns
@@ -178,26 +208,3 @@ attack → Left Click / Gamepad X
 interact → E / Gamepad Y
 pause → Escape / Start
 ```
-
-## References
-
-| Topic | File |
-|-------|------|
-| Project Setup | `references/01-godot-project-setup.md` |
-| Editor Guide | `references/02-godot-editor-mastery.md` |
-| GDScript Reference | `references/03-gdscript-pro.md` |
-| Nodes & Scenes | `references/04-godot-nodes-scenes.md` |
-| 2D Workflow | `references/05-godot-2d-fundamentals.md` |
-| 3D Workflow | `references/06-godot-3d-fundamentals.md` |
-| Physics | `references/07-godot-physics.md` |
-| Animation | `references/08-godot-animation.md` |
-| UI Design | `references/09-godot-ui-design.md` |
-| Audio | `references/10-godot-audio.md` |
-| Input System | `references/11-godot-input-system.md` |
-| Export & Deploy | `references/12-godot-export-deploy.md` |
-| Performance | `references/13-godot-performance.md` |
-| File I/O | `references/14-godot-file-io.md` |
-| Shaders | `references/15-godot-shaders.md` |
-| Networking | `references/16-godot-networking.md` |
-| Testing & Automation | `references/17-godot-testing.md` |
-| Architecture & Tooling | `references/18-godot-architecture-tooling.md` |
