@@ -2,7 +2,7 @@
   "name": "godomaster",
   "displayName": "GodoMaster",
   "description": "GodoMaster — Godot 4.x game development intelligence: GDScript, nodes/scenes, 2D/3D, physics, animation, UI, audio, input, shaders, networking, performance, export, file I/O, testing, and architecture/tooling.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "yanha",
   "license": "MIT",
   "repository": "https://github.com/Aetik-yue/GodoMaster",

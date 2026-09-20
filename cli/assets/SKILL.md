@@ -5,7 +5,7 @@ argument-hint: "[topic] [context]"
 license: MIT
 metadata:
   author: yanha
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # GodoMaster
