@@ -55,10 +55,10 @@ Options:
 
 ```bash
 # Install directly from repository
-curl -fsSL https://raw.githubusercontent.com/yanha/GodoMaster/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Aetik-yue/GodoMaster/main/install.sh | bash
 
 # With force reinstall
-curl -fsSL https://raw.githubusercontent.com/yanha/GodoMaster/main/install.sh | bash -s -- --force
+curl -fsSL https://raw.githubusercontent.com/Aetik-yue/GodoMaster/main/install.sh | bash -s -- --force
 ```
 
 ### Manual Copy

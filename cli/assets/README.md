@@ -55,10 +55,10 @@ npx godomaster-skill
 
 ```bash
 # 从仓库直接安装
-curl -fsSL https://raw.githubusercontent.com/yanha/GodoMaster/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Aetik-yue/GodoMaster/main/install.sh | bash
 
 # 强制重新安装
-curl -fsSL https://raw.githubusercontent.com/yanha/GodoMaster/main/install.sh | bash -s -- --force
+curl -fsSL https://raw.githubusercontent.com/Aetik-yue/GodoMaster/main/install.sh | bash -s -- --force
 ```
 
 ### 手动复制

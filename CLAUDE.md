@@ -41,9 +41,14 @@ When modifying reference files, edit directly in the `references/` directory. Th
 **CLI Assets:** Run sync before publishing:
 
 ```bash
-cp .claude/skills/godomaster/SKILL.md cli/assets/SKILL.md
-cp .claude/skills/godomaster/references/*.md cli/assets/references/
-cp README.md README.zh-cn.md cli/assets/
+npm run sync    # node scripts/sync-assets.js
+```
+
+The script reads the routing table in `SKILL.md` to decide which references to copy, so a
+reference that is added but not routed will not reach `cli/assets/`. Verify with:
+
+```bash
+diff -rq .claude/skills/godomaster cli/assets   # only "Only in cli/assets: README*" is expected
 ```
 
 ## Content Guidelines

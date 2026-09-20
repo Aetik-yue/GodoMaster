@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { mkdir, cp, access, readdir } = require('node:fs/promises');
+const { mkdir, cp, access, readdir, rm } = require('node:fs/promises');
 const { join } = require('node:path');
 const { homedir } = require('node:os');
 
@@ -57,19 +57,29 @@ ${GREEN}╔═══════════════════════
   }
 
   // Check if already installed
-  const alreadyInstalled = await exists(TARGET_DIR);
-  if (alreadyInstalled) {
+  const installed = await exists(TARGET_DIR);
+  let replacing = false;
+  if (installed) {
     const forceFlag = process.argv.includes('--force') || process.argv.includes('-f');
     if (!forceFlag) {
       info(`Already installed at: ${TARGET_DIR}`);
       info('Use --force to reinstall.');
       return;
     }
+    replacing = true;
   }
 
   if (isDryRun) {
-    info(`[DRY RUN] Would install to: ${TARGET_DIR}`);
+    info(`[DRY RUN] Would ${replacing ? 'replace' : 'install to'}: ${TARGET_DIR}`);
     return;
+  }
+
+  // Replace wholesale rather than overwrite, so renamed or removed references don't linger
+  if (replacing) {
+    if (!TARGET_DIR.endsWith(join('.claude', 'skills', 'godomaster'))) {
+      throw new Error(`Refusing to replace unexpected path: ${TARGET_DIR}`);
+    }
+    await rm(TARGET_DIR, { recursive: true, force: true });
   }
 
   // Create target directory
@@ -92,8 +102,8 @@ ${GREEN}╔═══════════════════════
     success(`Installed: references/ (${refs.length} files)`);
   }
 
-  // Copy READMEs
-  for (const readmeName of ['README.md', 'README.zh-cn.md']) {
+  // Copy READMEs (README.zh-cn.md stays in the package for the npm page; it duplicates README.md)
+  for (const readmeName of ['README.md', 'README.en.md']) {
     const readmeSrc = join(ASSETS_DIR, readmeName);
     if (await exists(readmeSrc)) {
       await cp(readmeSrc, join(TARGET_DIR, readmeName));

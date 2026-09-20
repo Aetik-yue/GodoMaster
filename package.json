@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "sync": "node scripts/sync-assets.js"
+  },
   "devDependencies": {
     "sharp": "^0.34.5"
   }
